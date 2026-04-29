@@ -1,18 +1,16 @@
-# big-O-evaluator
+# Algorithm Performance Evaluator
 
-Desktop app for evaluating algorithm complexity.
+Desktop app for measuring algorithm performance and estimating Big O complexity.
+
+## Overview
+
+A local desktop tool for running algorithms against different input sizes, collecting timing data, and comparing the results to common complexity models.
 
 ## Structure
 
-- `src/big_o_evaluator/`: application package and entrypoint
-- `src/big_o_evaluator/core/`: algorithm analysis and evaluation logic
-- `src/big_o_evaluator/ui/`: window and visualization code
-- `src/big_o_evaluator/workers/`: background or threaded work
-- `core/`, `ui/`, `workers/`: legacy top-level folders kept for now while the new package layout is introduced
+- `core/`: execution, generation, and estimation logic
+- `ui/`: window, editor, and visualization code
 
-## Run
+## Status
 
-```bash
-python -m pip install -e .
-big-o-evaluator
-```
+The project is in active development and the structure will expand as the app takes shape.
