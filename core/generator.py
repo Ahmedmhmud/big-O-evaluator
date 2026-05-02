@@ -1,5 +1,5 @@
 import random
-from typing import List
+from typing import List, Tuple
 from ui.input_panel import get_values
 
 def auto_generated_data(size: int, case: str) -> List[int]:
@@ -22,6 +22,10 @@ def auto_generated_data(size: int, case: str) -> List[int]:
         random.shuffle(values)
     
     return values
+
+def generated_sizes(sizes_range: Tuple[int, int]) -> List[int]:
+    start, end = sizes_range
+    return sorted(set(max(start, min(end, 2 ** i)) for i in range(start, end + 1)))
     
 def manual_generated_data() -> List[int]:
     values = get_values()
