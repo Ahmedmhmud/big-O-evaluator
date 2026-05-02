@@ -1,9 +1,10 @@
 from time import perf_counter_ns
+from typing import List
 from statistics import median
 from core.generator import auto_generated_data
 
 
-def runner_once(code_string, data): # for manual mode and will be used for auto mode as a helper function
+def runner_once(code_string: str, data: list) -> List[int]: # for manual mode and will be used for auto mode as a helper function
     namespace = {}
     exec(code_string, namespace)
     user_func = namespace['user_algorithm']
