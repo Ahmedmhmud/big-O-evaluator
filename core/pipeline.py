@@ -6,6 +6,8 @@ def pipeline(code_string, mode, case, sizes_range=None, manual_array=None):
     results = []
 
     if mode == "MANUAL":
+        if not manual_array:
+            raise ValueError("Manual array must be provided for MANUAL mode")
         results.append(runner_once(code_string, manual_array))
         return {
             "label": None,
