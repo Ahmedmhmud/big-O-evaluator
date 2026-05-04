@@ -2,7 +2,7 @@ from core.generator import SIZES
 from core.runner import runner, runner_once
 from core.estimator import estimate_complexity
 
-def pipeline(code_string, mode, case, manual_array=None, timeout=2.0):
+def pipeline(code_string, mode, case, manual_array=None, timeout=30.0):
     results = []
 
     if mode == "MANUAL":

@@ -71,6 +71,16 @@ class OutputPanel(QTextEdit):
             valid_count = len(valid_points)
             timed_out_sizes = [pt[0] for pt in results_list if isinstance(pt, (list, tuple)) and len(pt) >= 2 and pt[1] is None]
 
+            if valid_count == 0 and timed_out_sizes:
+                self.set_output(
+                    "● [ANALYSIS] Performance Profile Generated\n"
+                    f"{'—'*35}\n"
+                    "STATUS     : TIME LIMIT EXCEEDED\n"
+                    "DETAIL     : Some inputs did not finish in time.\n"
+                    "POSSIBILITY: The algorithm may contain an infinite loop or be too slow."
+                )
+                return
+
             raw_r2 = result_dict.get("r2")
             try:
                 r2_val = float(raw_r2) if raw_r2 is not None else None

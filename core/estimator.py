@@ -76,7 +76,7 @@ def estimate_complexity(sizes, times):
         except Exception:
             continue
 
-    if best_r2 < 0.85:
+    if best_r2 < 0.5:
         best_fit_name = "Undetermined"
 
     return best_fit_name, round(best_r2, 4)

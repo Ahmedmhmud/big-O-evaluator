@@ -86,7 +86,7 @@ class MainWindow(QMainWindow):
         self._execution_worker = ThreadWorker(
             code_string=algorithm_source,
             mode=execution_mode,
-            case="RANDOM",
+            case="AVERAGE",
             manual_array=manual_sizes,
             timeout=2.0
         )

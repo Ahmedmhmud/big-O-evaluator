@@ -4,7 +4,7 @@ from statistics import median
 from multiprocessing import Process, Queue
 from core.generator import auto_generated_data
 
-def runner_once(code_string: str, data: list, timeout: float = 2.0) -> Tuple[int, Optional[float]]:
+def runner_once(code_string: str, data: list, timeout: float = 30.0) -> Tuple[int, Optional[float]]:
     for _ in range(3):
         res = run_with_timeout(code_string, list(data), timeout)
         if res is None:
@@ -23,7 +23,7 @@ def runner_once(code_string: str, data: list, timeout: float = 2.0) -> Tuple[int
     return (len(data), median(times))
 
 
-def runner(code_string: str, sizes: list, case: str, timeout: float = 2.0) -> List[Tuple[int, Optional[float]]]:
+def runner(code_string: str, sizes: list, case: str, timeout: float = 30.0) -> List[Tuple[int, Optional[float]]]:
     results: List[Tuple[int, Optional[float]]] = []
     for size in sizes:
         data = auto_generated_data(size, case)
@@ -73,5 +73,5 @@ def run_with_timeout(code_string: str, data: list, timeout: float) -> Optional[f
             pass
 
     if status == 'ok':
-        return value / 1_000_000
+        return value / 1_000
     return None

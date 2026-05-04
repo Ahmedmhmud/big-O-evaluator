@@ -1,6 +1,5 @@
 import random
-import math
-from typing import List, Tuple
+from typing import List
 
 """
     # the case naming is a bit clunky 
@@ -23,4 +22,4 @@ def auto_generated_data(size: int, case: str) -> List[int]:
     
     return values
 
-SIZES =  [128, 256, 512, 1024, 2048, 4096]
+SIZES =  [5, 10, 15, 20, 50, 100, 500, 1000, 5000, 10000, 50000, 100000]
