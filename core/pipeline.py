@@ -1,8 +1,8 @@
-from core.generator import generated_sizes
+from core.generator import SIZES
 from core.runner import runner, runner_once
 from core.estimator import estimate_complexity
 
-def pipeline(code_string, mode, case, sizes_range=None, manual_array=None):
+def pipeline(code_string, mode, case, manual_array=None):
     results = []
 
     if mode == "MANUAL":
@@ -15,8 +15,7 @@ def pipeline(code_string, mode, case, sizes_range=None, manual_array=None):
             "results": results
         }
 
-    sizes = generated_sizes(sizes_range)
-    results.extend(runner(code_string, sizes, case))
+    results.extend(runner(code_string, SIZES, case))
 
     final_sizes = [s[0] for s in results]
     final_times = [s[1] for s in results]

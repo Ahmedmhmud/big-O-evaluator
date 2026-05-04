@@ -5,7 +5,7 @@ from PyQt5.QtCore import Qt
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from ui.code_editor import CodeEditor
+from ui.code_Editor import CodeEditor
 from ui.input_panel import InputPanel
 from ui.output_panel import OutputPanel
 from ui.visualizer import Visualizer
@@ -87,7 +87,6 @@ class MainWindow(QMainWindow):
             code_string=algorithm_source,
             mode=execution_mode,
             case="RANDOM",
-            sizes_range=None,
             manual_array=manual_sizes
         )
         
