@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QLabel, 
                              QRadioButton, QButtonGroup, QLineEdit, 
-                             QPushButton, QListWidget)
+                             QPushButton, QListWidget, QCheckBox)
 from PyQt5.QtCore import Qt
 
 class InputPanel(QWidget):
@@ -36,6 +36,9 @@ class InputPanel(QWidget):
         mode_container.addWidget(self.manual_radio)
         mode_container.addWidget(self.auto_radio)
 
+        self.sort_required_checkbox = QCheckBox("Requires Sorting")
+        self.sort_required_checkbox.setChecked(False)
+
         self.size_input = QLineEdit()
         self.size_input.setPlaceholderText("Define diagnostic n (Integer)...")
         
@@ -52,6 +55,7 @@ class InputPanel(QWidget):
 
         main_layout.addWidget(self.header)
         main_layout.addLayout(mode_container)
+        main_layout.addWidget(self.sort_required_checkbox)
         main_layout.addLayout(input_row)
         main_layout.addWidget(self.data_viewer)
         main_layout.addWidget(self.flush_btn)
@@ -108,6 +112,10 @@ class InputPanel(QWidget):
     
         return None
 
+    def is_sort_required(self):
+        """Returns whether the current algorithm requires sorted input."""
+        return self.sort_required_checkbox.isChecked()
+
     def _apply_styles(self):
         """Applies technical styling to the widget container."""
         self.setStyleSheet("""
@@ -127,4 +135,5 @@ class InputPanel(QWidget):
                 border: 1px solid #1f2937; border-radius: 4px; font-family: 'Consolas';
             }
             QRadioButton { color: #cbd5e1; }
+            QCheckBox { color: #cbd5e1; }
         """)

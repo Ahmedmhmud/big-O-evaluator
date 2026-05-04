@@ -70,6 +70,7 @@ class MainWindow(QMainWindow):
 
         execution_mode = self.input_panel.get_mode()
         manual_sizes = self.input_panel.get_values()
+        selected_case = "BEST" if self.input_panel.is_sort_required() else "AVERAGE"
 
         # Validation: Manual mode requires pre-defined input sizes
         if execution_mode == "MANUAL" and not manual_sizes:
@@ -86,7 +87,7 @@ class MainWindow(QMainWindow):
         self._execution_worker = ThreadWorker(
             code_string=algorithm_source,
             mode=execution_mode,
-            case="AVERAGE",
+            case=selected_case,
             manual_array=manual_sizes,
             timeout=2.0
         )
