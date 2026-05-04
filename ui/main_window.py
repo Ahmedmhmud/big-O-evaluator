@@ -87,7 +87,8 @@ class MainWindow(QMainWindow):
             code_string=algorithm_source,
             mode=execution_mode,
             case="RANDOM",
-            manual_array=manual_sizes
+            manual_array=manual_sizes,
+            timeout=2.0
         )
         
         self._execution_worker.finished.connect(self._process_analysis_results, Qt.QueuedConnection)
@@ -109,14 +110,16 @@ class MainWindow(QMainWindow):
         complexity_label = data.get("label") or data.get("best_fit") or "Inconclusive"
         data["label"] = complexity_label 
         
+        execution_points = data.get("results", [])
         self.output.display_results(data)
         
-        execution_points = data.get("results", [])
         if execution_points:
             try:
-                input_sizes = [point[0] for point in execution_points]
-                latency_times = [point[1] for point in execution_points]
-                self.visualizer.plot(input_sizes, latency_times, complexity_label, data.get("r2"))
+                valid_points = [point for point in execution_points if point[1] is not None]
+                if valid_points:
+                    input_sizes = [point[0] for point in valid_points]
+                    latency_times = [point[1] for point in valid_points]
+                    self.visualizer.plot(input_sizes, latency_times, complexity_label, data.get("r2"))
             except Exception as e:
                 sys.stderr.write(f"Visualization Dispatch Error: {str(e)}\n")
 

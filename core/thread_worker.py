@@ -6,12 +6,13 @@ class ThreadWorker(QThread):
     finished = pyqtSignal(dict) 
     error = pyqtSignal(str)     
 
-    def __init__(self, code_string, mode, case, manual_array=None):
+    def __init__(self, code_string, mode, case, manual_array=None, timeout=2.0):
         super().__init__()
         self.code_string = code_string
         self.mode = mode
         self.case = case
         self.manual_array = manual_array
+        self.timeout = timeout
 
     def run(self):
         try:
@@ -19,7 +20,8 @@ class ThreadWorker(QThread):
                 self.code_string,
                 self.mode,
                 self.case,
-                manual_array=self.manual_array
+                manual_array=self.manual_array,
+                timeout=self.timeout
             )
             self.finished.emit(result)
         except Exception as e:
