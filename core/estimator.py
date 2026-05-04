@@ -48,6 +48,14 @@ def estimate_complexity(sizes, times):
     x = np.array(sizes)
     y = np.array(times)
 
+    # O(1) threshold-based detection: if timings are tiny and consistent, classify as O(1)
+    # This avoids the noise trap of fitting ultra-fast operations
+    median_time = float(np.median(y))
+    max_time = float(np.max(y))
+    
+    if median_time < 0.01 and max_time < 0.05:
+        return "O(1)", 1.0
+
     models = [
         ("O(1)", constant_model),
         ("O(n)", linear_model),
