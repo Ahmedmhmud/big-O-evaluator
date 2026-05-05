@@ -66,10 +66,10 @@ def estimate_complexity(sizes, times):
         ("O(log n)", log_n_model),
         ("O(n)", linear_model),
         ("O(n log n)", n_log_n_model),
-        ("O(n^2)", quadratic_model),
-        ("O(n^2 log n)", n2_log_n_model),
-        ("O(n^3)", cubic_model),
-        ("O(2^n)", exponential_model)
+        ("O(n²)", quadratic_model),
+        ("O(n² log n)", n2_log_n_model),
+        ("O(n³)", cubic_model),
+        ("O(2ⁿ)", exponential_model)
     ]
 
     best_fit_name = "Undetermined"
@@ -95,13 +95,13 @@ def estimate_complexity(sizes, times):
     if best_r2 < 0.5:
         best_fit_name = "Undetermined"
 
-    if best_fit_name == "O(n^2 log n)":
-        quadratic_r2 = r2_by_name.get("O(n^2)")
+    if best_fit_name == "O(n² log n)":
+        quadratic_r2 = r2_by_name.get("O(n²)")
         margin = best_r2 - quadratic_r2 if quadratic_r2 is not None else None
         sparse_samples = len(x) <= 10
 
         if sparse_samples and quadratic_r2 is not None and quadratic_r2 >= 0.995:
-            best_fit_name = "O(n^2)"
+            best_fit_name = "O(n²)"
             best_r2 = quadratic_r2
         elif (
             quadratic_r2 is not None
@@ -109,7 +109,7 @@ def estimate_complexity(sizes, times):
             and margin is not None
             and margin < 0.00025
         ):
-            best_fit_name = "O(n^2)"
+            best_fit_name = "O(n²)"
             best_r2 = quadratic_r2
 
     return best_fit_name, round(best_r2, 4)
