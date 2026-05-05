@@ -1,18 +1,18 @@
 from time import perf_counter_ns
-from typing import Tuple, List, Optional, Any
+from typing import Tuple, List, Optional
 from statistics import median
 from multiprocessing import Process, Queue
 from core.generator import auto_generated_data
 
-def runner_once(code_object: Any, data: list, timeout: float = 30.0) -> Tuple[int, Optional[float]]:
+def runner_once(code_string: str, data: list, timeout: float = 30.0) -> Tuple[int, Optional[float]]:
     for _ in range(3):
-        res = run_with_timeout(code_object, list(data), timeout)
+        res = run_with_timeout(code_string, list(data), timeout)
         if res is None:
             return (len(data), None)
 
     times: List[float] = []
     for _ in range(5):
-        res = run_with_timeout(code_object, list(data), timeout)
+        res = run_with_timeout(code_string, list(data), timeout)
         if res is None:
             continue
         times.append(res)
@@ -25,19 +25,17 @@ def runner_once(code_object: Any, data: list, timeout: float = 30.0) -> Tuple[in
 
 def runner(code_string: str, sizes: list, case: str, timeout: float = 30.0) -> List[Tuple[int, Optional[float]]]:
     results: List[Tuple[int, Optional[float]]] = []
-    code_object = compile(code_string, '<user_code>', 'exec')
-
     for size in sizes:
         data = auto_generated_data(size, case)
-        results.append(runner_once(code_object, data, timeout))
+        results.append(runner_once(code_string, data, timeout))
 
     return results
 
 
-def worker_execute(code_object: Any, data: list, result_q: Queue):
+def worker_execute(code_string: str, data: list, result_q: Queue):
     ns = {}
     try:
-        exec(code_object, ns)
+        exec(code_string, ns)
         if 'user_algorithm' not in ns:
             result_q.put(('error', 'user_algorithm_not_defined'))
             return
@@ -50,9 +48,9 @@ def worker_execute(code_object: Any, data: list, result_q: Queue):
         result_q.put(('error', str(e)))
 
 
-def run_with_timeout(code_object: Any, data: list, timeout: float) -> Optional[float]:
+def run_with_timeout(code_string: str, data: list, timeout: float) -> Optional[float]:
     result_q: "Queue" = Queue()
-    proc = Process(target=worker_execute, args=(code_object, data, result_q))
+    proc = Process(target=worker_execute, args=(code_string, data, result_q))
     proc.start()
     proc.join(timeout)
     if proc.is_alive():
