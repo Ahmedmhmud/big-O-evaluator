@@ -1,11 +1,11 @@
 import sys
 import os
-from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QGridLayout
+from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QGridLayout
 from PyQt5.QtCore import Qt
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from ui.code_editor import CodeEditor
+from ui.code_Editor import CodeEditor
 from ui.input_panel import InputPanel
 from ui.output_panel import OutputPanel
 from ui.visualizer import Visualizer
@@ -70,6 +70,7 @@ class MainWindow(QMainWindow):
 
         execution_mode = self.input_panel.get_mode()
         manual_sizes = self.input_panel.get_values()
+        selected_case = "BEST" if self.input_panel.is_sort_required() else "AVERAGE"
 
         # Validation: Manual mode requires pre-defined input sizes
         if execution_mode == "MANUAL" and not manual_sizes:
@@ -86,9 +87,9 @@ class MainWindow(QMainWindow):
         self._execution_worker = ThreadWorker(
             code_string=algorithm_source,
             mode=execution_mode,
-            case="RANDOM",
-            sizes_range=None,
-            manual_array=manual_sizes
+            case=selected_case,
+            manual_array=manual_sizes,
+            timeout=2.0
         )
         
         self._execution_worker.finished.connect(self._process_analysis_results, Qt.QueuedConnection)
@@ -110,14 +111,16 @@ class MainWindow(QMainWindow):
         complexity_label = data.get("label") or data.get("best_fit") or "Inconclusive"
         data["label"] = complexity_label 
         
+        execution_points = data.get("results", [])
         self.output.display_results(data)
         
-        execution_points = data.get("results", [])
         if execution_points:
             try:
-                input_sizes = [point[0] for point in execution_points]
-                latency_times = [point[1] for point in execution_points]
-                self.visualizer.plot(input_sizes, latency_times, complexity_label, data.get("r2"))
+                valid_points = [point for point in execution_points if point[1] is not None]
+                if valid_points:
+                    input_sizes = [point[0] for point in valid_points]
+                    latency_times = [point[1] for point in valid_points]
+                    self.visualizer.plot(input_sizes, latency_times, complexity_label, data.get("r2"))
             except Exception as e:
                 sys.stderr.write(f"Visualization Dispatch Error: {str(e)}\n")
 
@@ -138,12 +141,3 @@ class MainWindow(QMainWindow):
             QPushButton:disabled { background-color: #1e3a8a; color: #94a3b8; }
             QLabel { color: #f8fafc; }
         """)
-
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    app.setApplicationName("Big-O Profiler")
-    
-    window = MainWindow()
-    window.show()
-    
-    sys.exit(app.exec_())

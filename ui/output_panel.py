@@ -65,20 +65,45 @@ class OutputPanel(QTextEdit):
                     output = "● [SYSTEM] Diagnostic: Logic integrity verified (General)."
         else:
             label = result_dict.get("label") or "Undetermined"
+
+            total_samples = len(results_list)
+            valid_points = [pt for pt in results_list if isinstance(pt, (list, tuple)) and len(pt) >= 2 and pt[1] is not None]
+            valid_count = len(valid_points)
+            timed_out_sizes = [pt[0] for pt in results_list if isinstance(pt, (list, tuple)) and len(pt) >= 2 and pt[1] is None]
+
+            if valid_count == 0 and timed_out_sizes:
+                self.set_output(
+                    "● [ANALYSIS] Performance Profile Generated\n"
+                    f"{'—'*35}\n"
+                    "STATUS     : TIME LIMIT EXCEEDED\n"
+                    "DETAIL     : Some inputs did not finish in time.\n"
+                    "POSSIBILITY: The algorithm may contain an infinite loop or be too slow."
+                )
+                return
+
+            raw_r2 = result_dict.get("r2")
             try:
-                r2 = float(result_dict.get("r2", 0.0))
+                r2_val = float(raw_r2) if raw_r2 is not None else None
             except (TypeError, ValueError):
-                r2 = 0.0
-            
+                r2_val = None
+
+            r2_display = f"{r2_val:.4f}" if r2_val is not None else "N/A"
+
             output = (
                 f"● [ANALYSIS] Performance Profile Generated\n"
                 f"{'—'*35}\n"
                 f"COMPLEXITY : {label}\n"
-                f"RELIABILITY: {r2:.4f} (R² Coefficient)\n"
-                f"SAMPLES    : {len(results_list)} data points processed\n"
+                f"RELIABILITY: {r2_display} (R² Coefficient)\n"
+                f"SAMPLES    : {valid_count}/{total_samples} valid data points\n"
                 f"{'—'*35}\n"
                 f"Conclusion : Performance trend identified successfully."
             )
+
+            if timed_out_sizes:
+                output += (
+                    "\n\nTime Limit Exceeded: Execution exceeded the time limit for one or more inputs."
+                    "\nSuggestion : Review algorithm for infinite loops or high complexity."
+                )
             
         self.set_output(output)
 

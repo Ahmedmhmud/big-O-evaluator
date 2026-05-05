@@ -1,6 +1,5 @@
 import random
-import math
-from typing import List, Tuple
+from typing import List
 
 """
     # the case naming is a bit clunky 
@@ -23,33 +22,13 @@ def auto_generated_data(size: int, case: str) -> List[int]:
     
     return values
 
-def generated_sizes(sizes_range: Tuple[int, int]) -> List[int]:
-    start, end = sizes_range
-    if start <= 0 or end <= 0:
-        raise ValueError("sizes_range values must be positive")
-    if start > end:
-        raise ValueError("sizes_range start must be <= end")
-
-    # Mostly will be problem but I will customize it later
-    default_sizes = [128, 256, 512, 1024, 2048, 4096]
-
-    if end - start < 32:
-        return default_sizes.copy()
-
-    sizes = [start]
-    power = max(1, math.ceil(math.log2(start)))
-    while True:
-        value = 2 ** power
-        if value > end:
-            break
-        if value > sizes[-1]:
-            sizes.append(value)
-        power += 1
-
-    if sizes[-1] != end:
-        sizes.append(end)
-
-    if len(sizes) < 4:
-        return default_sizes.copy()
-
-    return sizes
+SIZES = [
+    5, 10, 15, 20,
+    100, 300, 400, 500, 750,
+    1000, 1500, 2000, 3000, 5000, 10000,
+    50000, 60000, 70000, 80000, 90000, 100000,
+    120000, 150000, 200000, 300000, 400000, 500000,
+    700000, 900000, 1000000,
+    1200000, 1500000, 2000000,
+    5000000, 7500000, 10000000
+]

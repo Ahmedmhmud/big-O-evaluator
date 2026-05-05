@@ -35,6 +35,7 @@ class Visualizer(QWidget):
         
         models = {
             "O(1)":      lambda x: np.ones_like(x),
+            "O(log n)":  lambda x: np.log2(np.maximum(x, 1.0)),
             "O(n)":      lambda x: x,
             "O(n log n)": lambda x: x * np.log2(x_safe),
             "O(n^2)":    lambda x: x**2,
