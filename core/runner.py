@@ -73,5 +73,5 @@ def run_with_timeout(code_string: str, data: list, timeout: float) -> Optional[f
             pass
 
     if status == 'ok':
-        return value / 1_000
+        return value / 1_000_000
     return None

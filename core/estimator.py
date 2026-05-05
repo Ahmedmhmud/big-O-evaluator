@@ -10,6 +10,11 @@ def linear_model(n, a, b):
     return a * n + b
 
 
+def log_n_model(n, a, b):
+    n = np.maximum(n, 1)
+    return a * np.log2(n) + b
+
+
 def n_log_n_model(n, a, b):
     n = np.maximum(n, 1)
     return a * (n * np.log2(n)) + b
@@ -58,6 +63,7 @@ def estimate_complexity(sizes, times):
 
     models = [
         ("O(1)", constant_model),
+        ("O(log n)", log_n_model),
         ("O(n)", linear_model),
         ("O(n log n)", n_log_n_model),
         ("O(n^2)", quadratic_model),
