@@ -4,12 +4,11 @@ from core.estimator import estimate_complexity
 
 def pipeline(code_string, mode, case, manual_array=None, timeout=30.0):
     results = []
-    code_object = compile(code_string, '<user_code>', 'exec')
 
     if mode == "MANUAL":
         if not manual_array:
             raise ValueError("Manual array must be provided for MANUAL mode")
-        results.append(runner_once(code_object, manual_array, timeout))
+        results.append(runner_once(code_string, manual_array, timeout))
         return {
             "label": None,
             "r2": None,
