@@ -1,6 +1,6 @@
 import sys
 import os
-from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QGridLayout
+from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QGridLayout
 from PyQt5.QtCore import Qt
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -141,12 +141,3 @@ class MainWindow(QMainWindow):
             QPushButton:disabled { background-color: #1e3a8a; color: #94a3b8; }
             QLabel { color: #f8fafc; }
         """)
-
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    app.setApplicationName("Big-O Profiler")
-    
-    window = MainWindow()
-    window.show()
-    
-    sys.exit(app.exec_())
