@@ -74,6 +74,7 @@ def estimate_complexity(sizes, times):
 
     best_fit_name = "Undetermined"
     best_r2 = -np.inf
+    r2_by_name = {}
 
     for name, model_func in models:
         try:
@@ -82,6 +83,7 @@ def estimate_complexity(sizes, times):
             predictions = model_func(x, *popt)
 
             r2 = r_squared(y, predictions)
+            r2_by_name[name] = r2
 
             if r2 > best_r2:
                 best_r2 = r2
@@ -92,5 +94,22 @@ def estimate_complexity(sizes, times):
 
     if best_r2 < 0.5:
         best_fit_name = "Undetermined"
+
+    if best_fit_name == "O(n^2 log n)":
+        quadratic_r2 = r2_by_name.get("O(n^2)")
+        margin = best_r2 - quadratic_r2 if quadratic_r2 is not None else None
+        sparse_samples = len(x) <= 10
+
+        if sparse_samples and quadratic_r2 is not None and quadratic_r2 >= 0.995:
+            best_fit_name = "O(n^2)"
+            best_r2 = quadratic_r2
+        elif (
+            quadratic_r2 is not None
+            and quadratic_r2 >= 0.999
+            and margin is not None
+            and margin < 0.00025
+        ):
+            best_fit_name = "O(n^2)"
+            best_r2 = quadratic_r2
 
     return best_fit_name, round(best_r2, 4)
